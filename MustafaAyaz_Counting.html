@@ -37,11 +37,7 @@
     <p id=out>This text is not shown. Why?</p>
     <input type=button value=arttır onClick="increment()">
     <hr />
-    <label>inch</label>
-    <input id="inputInches"  type="number" placeholder="Inches" oninput="lengthConverter(this.id,this.value)" onchange="lengthConverter(this.id,this.value)">
-    <label>cm</label>
-    <input id="inputcm"  type="number" placeholder="cm" oninput="lengthConverter(this.id,this.value)" onchange="lengthConverter(this.id,this.value)">
-
+   
     <hr />
     <b>Örnek Kod</b>
 <pre id=sample>This text is not shown. Why?</pre>
@@ -51,25 +47,7 @@
         Ref: <a href="https://www.w3schools.com/js/"
                 target="NewTab">JS Tutorial</a>
     </p>
-    <script>
-
-        function lengthConverter(source, valNum) {
-            valNum = parseFloat(valNum);
-            var inputInches = document.getElementById("inputInches");
-            var inputcm = document.getElementById("inputcm");
-           
-            
-            if (source == "inputInches") {
-                inputcm.value = (valNum / 0.39370).toFixed(2);
-            }
-            if (source == "inputcm") {
-                inputInches.value = (valNum * 0.39370).toFixed(2);
-            }
-            
-        }
-
-
-    </script>
+ 
     <script>
         "use strict";
         // JavaScript comment
