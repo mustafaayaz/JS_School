@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./index.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>FILE OPERATIONS</h1>
+
+    <label>remote url</label><input type="text" id=urlInput><br>
+    <label>select local file(s)</label>
+    
+    <input type="file" multiple name="files" onchange="onSelected(files)" id=file>
+    <div id=res>
+
+    </div>
+
+<pre id=out></pre>
+<hr />
+<b>Sample code</b>
+<pre id=sample> </pre>
+</body>
+<script>
+    
+    var remotefile;
+    var sameFiles = [];
+    var selectedFiles = [];
+    var url;
+
+    async function readFileAsync (file){
+        return new Promise( (resolve,reject) => {
+            
+            let fileReader =  new FileReader();
+
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            }
+
+            fileReader.onerror = () => {
+                reject(fileReader.error);
+            }
+
+            fileReader.readAsText(file);
+            
+        });
+    }
+
+    async function checkUrlPresentend(){
+        if(urlInput.value){
+            url = urlInput.value;
+            await getRemoteFile();
+            return true;
+        }else{
+            res.innerText = 'please provide a url'
+            return false;
+        }
+
+    }
+
+    async function onSelected(files){
+        clear();
+        let urlPresented = await checkUrlPresentend();
+        if(!urlPresented){
+            return;
+        }
+
+        selectedFiles = files;
+        
+        for (const file of files) {
+            
+            let read = await readFileAsync(file);
+
+            if(read ==  remotefile){
+                sameFiles.push(file);
+            }
+
+        }
+
+        display();
+    }
+
+    function display(){
+        let fileArray = [...selectedFiles];
+        res.innerText = `
+            remote file: ${url}
+            Choose files: ${fileArray.length}
+            ${fileArray.map(file => file.name).toString()}
+            Result: ${
+                sameFiles.length == 0 ?
+                `${fileArray.length} checked, all are different`:
+                `${fileArray.length} checked, ${sameFiles[0].name} equals to ${url}`
+            }
+
+        `
+    }
+
+    async function getRemoteFile(){
+        let data = await fetch(url);
+        remotefile = await data.text();
+    }
+
+    async function init(){
+        
+        res.innerText = `
+        
+            please provide url and files
+
+        `
+    }
+
+    function clear(){
+        sameFiles = [];
+        selectedFiles = [];
+    }
+
+    init();
+
+function fileSelect() {
+    fetch(remote.value).then(r => r.blob()).then(checkFiles)
+}
+function checkFiles() {
+    let fileArray = [...selectedFiles];
+        res.innerText = `
+            remote file: ${url}
+            Choose files: ${fileArray.length}
+            ${fileArray.map(file => file.name).toString()}
+            Result: ${
+                sameFiles.length == 0 ?
+                `${fileArray.length} checked, all are different`:
+                `${fileArray.length} checked, ${sameFiles[0].name} equals to ${url}`
+            }
+        `
+}
+sample.innerText = fileSelect+"\n"+checkFiles
+</script>
+</html>
