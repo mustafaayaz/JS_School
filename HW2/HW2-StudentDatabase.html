@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://blm-fsmvu.github.io/305/work/Students.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="https://blm-fsmvu.github.io/305/images/icon192.png">
+    <title>Student Database </title>
+
+  <style>
+    body { max-width: 440px; }
+    .link {
+        color: blue;
+        cursor: pointer;
+        font-style: italic;
+    }
+    .liste {
+        visibility: hidden;
+        font: 11px arial, sans-serif;
+        color: white;
+        background: blue;
+        cursor: text;
+        padding: 6px;
+        position: absolute;
+        height: 116px;
+        overflow-y: auto;
+    }
+    .link:hover .liste { 
+        visibility: visible; 
+    }
+  </style>
+</head>
+
+<body>
+
+<h2 id="title">Student Database</h2>
+
+<button onclick="randomStd()">Random</button>
+<button onclick="findBest()">Best GPA</button>
+<button onclick="out.innerText=&quot;&quot;">Clear</button>
+
+<p>Student id: 
+<input type="number" id="txtStudent" value="213872357" >
+<input value="Show Student" type="button" id ="btnShowStudent" onclick="showStudent(txtStudent.value)">
+<input value="Q1, Exam schedule for a given student" type="button" id ="btn1soru" onclick="examScheduleForAGivenStudent()">
+</p>
+<p>Course id: 
+<input type="text" id="txtCourse" value="MATH 206">
+<input value="Show Course" type="button" id ="btnShowCourse" onclick="showCourse(txtCourse.value)">
+<input value="Q2, Student list taking a given course" type="button" id ="btnStudentList" onclick="studentListGivenCourse()">
+<input value="My Q, Exams scheduled at the same time" type="button" id ="courseFalan" onclick="examsScheduledAtTheSameTime()">
+
+
+
+</p>
+<p>Room id: 
+<input type="text" id="txtRoom" value="BZ014">
+<input value="Q3, Course List For a Given Room" type="button" id ="btnCourseListforGivenRoom" onclick="courseListGivenExamRoom()">
+<input value="Q4, Total number of courses in a given room" type="button" id ="btnTotalNumberOfCourses" onclick="numberOfCoursesGivenClass()">
+
+</p>
+<br><br>
+<input type="text" id="hasOrInclude" value="213872357" id="ekstraSoru" >
+<button onclick="hasTime()">Has Time</button>
+<button onclick="includesTime()">Includes Time</button>
+
+
+<p id="out" onclick="doClick(event)"></p>
+
+<hr>
+
+
+<script>
+"use strict";
+
+// HOCANIN OKUMA
+const LINK = "https://maeyler.github.io/JS/data/"
+function readStudents() {
+    fetch(LINK+"Students.txt").then(r => r.text())
+    .then(t => makeData(t, Student, stdMap))
+}
+function readCourses() {
+    fetch(LINK+"Courses.txt").then(r => r.text())
+    .then(t => makeData(t, Course, crsMap))
+}
+// HOCANIN OKUMA
+
+readStudents()
+readCourses()
+
+
+
+// BENİM SORU
+function examsScheduledAtTheSameTime() {
+            out.innerHTML=""
+            let count = 0;
+            let searchCourse = document.getElementById("txtCourse").value;
+            for (let course of crsMap.values()) {
+                if (course.id == searchCourse) {
+                    report("ID: " + course.id +" Time: " + course.time +" Date: "+ course.date)
+                    report("---------------")
+                    for (let crs of crsMap.values()) {
+                        if (crs.id != course.id && crs.date == course.date && crs.time == course.time ) {
+                            report(crs)
+                            count++
+                        }
+                    }
+                }
+            }
+            report("Number of Courses Coincide With [" + searchCourse + "] : " + count);
+        }
+// BENİM SORU
+
+// 4. SORU
+function numberOfCoursesGivenClass() {
+            let courses = courseListGivenExamRoom();
+            out.innerHTML = ""
+            let room = document.getElementById("txtRoom").value;
+            report("Number Of Courses in " + room + ": " + courses.length);
+        }
+
+
+// 4. SORU
+
+
+
+
+
+// 3. SORU
+function courseListGivenExamRoom() {
+            out.innerHTML = ""
+            let courseList = [];
+            let room = document.getElementById("txtRoom").value;
+            report("Course List Of Room: " + room);
+
+            for (let course of crsMap.values()) {
+                for (let cls of course.rooms) {
+                    if (cls == room) {
+                        courseList.push(course.id);
+                        report(course.id)
+                    }
+                }
+            }
+        return courseList
+
+        }
+// 3. SORU
+
+
+// 2. SORU
+    function studentListGivenCourse() {
+        out.innerHTML = ""
+            let searchCourse = document.getElementById("txtCourse").value
+            report("Student List Of " + searchCourse);
+            for (let std of stdMap.values()) {
+                for (let course of std.list) {
+                    if (course == searchCourse) {
+                        report("ID: " + std.id + " Name: " + std.name )
+                    }
+                }
+            }
+
+        }
+// 2. SORU 
+
+
+// 1. SORU DOĞRU
+function examScheduleForAGivenStudent() {
+    out.innerHTML = ""
+
+let id = document.getElementById("txtStudent").value
+let s = stdMap.get(id)
+report(s.name + "'s Schedule:" + '\n')
+let text = ""
+for (let c of s.list) {
+   text += crsMap.get(c).toString() + '\n'
+}
+report(text)
+}
+// 1. SORU DOĞRU
+
+
+// SON SORU
+function hasTime(){
+    out.innerHTML = ""
+
+    let id = document.getElementById("hasOrInclude").value
+    let toWhere = Number(id) + 10000
+    let start= Date.now();
+    let end=0;
+    let count=0;
+  for(let index = id;  index < toWhere; index++){
+        if(stdMap.has(index.toString()))  {
+            report(index)
+            count++;
+        }
+    }
+    end=Date.now()-start;
+    report(count + " results are found.")
+    report(end+" msec")
+
+
+    }
+
+
+function includesTime(){
+    out.innerHTML = ""
+
+    let id = document.getElementById("hasOrInclude").value
+    let toWhere = Number(id) + 10000
+    let start= Date.now();
+    let end=0;
+    let count=0;
+    let keys = [...stdMap.keys()];
+    for(let index = id;  index < toWhere; index++){
+        if(keys.toString().includes(index)) {
+            report(index)
+            count++;
+        }
+    }
+    end=Date.now()-start;
+    report(count + " results are found.")
+    report(end+" msec")
+
+}
+
+// SON SORU
+
+class Student {
+    constructor(id, name, gpa, ...list) {
+        if (!id) throw "Undefined Student id"
+        this.id = id;
+        this.name = name;
+        this.gpa = gpa.padEnd(4,'0'); 
+        this.list = list
+    }
+    toString() {
+        return "ID: "+ this.id+" Name: " + this.name+" GPA: "+this.gpa
+    }
+    static fromString(s) {
+        return new Student(...s.split('\t'))
+    }
+}
+class Course {
+  constructor(id, time, date, ...rooms) {
+    this.id = id
+    this.time = time
+    this.date = date
+    this.rooms = rooms
+  }
+  toString() {
+    return "ID: "+ this.id+" Date: " + this.date+" Time: "+this.time + " Rooms: " + this.rooms
+  }
+  static fromString(s) {
+    return new Course(...s.split('\t'))
+  }
+}
+
+
+
+
+
+// YAZDIRMA
+function report(msg, id, list) {
+    msg += " "; let txt = "<br>\n"+msg;
+    if (id) {
+        msg += id; txt += "<span class=link>"+id
+        if (list)  txt += "<span class=liste>"
+                    +list.join("<br>")+"</span>"
+        txt += "</span>"
+    }
+    console.log(msg);
+     out.innerHTML += txt; 
+}
+
+// MAP OLUŞTURMA
+const stdMap = new Map();
+const crsMap = new Map(); 
+
+
+function makeData(txt, Maker, map) {
+    map.clear()
+    for (let line of txt.split('\n')) {
+        if (!line) continue
+        let std = Maker.fromString(line)
+        map.set(std.id, std)
+    }
+    report(map.size+" items");
+    return map;
+}
+
+// YANDAKİ SAÇMA ŞEY BOŞVER
+function doClick(evt) {
+    let s = evt.target.innerText;
+    //if s contains only digits
+    if (/^\d+$/.test(s)) showStudent(s); 
+}
+
+// SHOW STUDENT BUTTON
+function showStudent(id) {
+    let std = stdMap.get(id);
+    if (!std) return report(id+" not found");
+    let t = std.toString()
+    report(t, "("+std.list.length+" courses)", std.list);
+    return std
+}
+
+// SHOW COURSE BUTTON
+function showCourse(id) {
+    id = id.toUpperCase();
+    let crs = crsMap.get(id);
+    if (!crs) return report(id+" not found");
+    let t = crs.toString()
+    report(t, crs.rooms.length+" rooms", crs.rooms);
+    let a = [];
+    for (let std of stdMap.values()) 
+        if (std.list.includes(id)) 
+            a.push(std.id+" "+std.name);
+    if (a.length > 0)
+        report(id+": ", a.length+" students", a);
+    else report("No students in "+id);
+    return a
+}
+
+// RANDOM STUDENT
+function randomStd() {
+    let keys = [...stdMap.keys()]  //Iterable
+    console.assert(keys.length == stdMap.size)
+    let i = Math.trunc(keys.length * Math.random());
+    let b = stdMap.get(keys[i]);
+    report("Random: ", b.id);
+    return b
+}
+
+// BEST GPA
+function findBest() { //the best gpa in stdMap
+    let a = [...stdMap.values()] //Array
+    let [b] = a.sort((x,y) => y.gpa-x.gpa)
+    report("Best ", b.id);
+}
+
+
+title.innerText = document.title
+</script>
+
+
+</body></html>
