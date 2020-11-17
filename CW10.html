@@ -66,12 +66,10 @@ class Crypto extends Menu {
     .then(b => display(MENU.bufferToHex(b)))
   } 
   shaFromFile(f) { //File or Blob
-    //use f.arrayBuffer()
-    return "implement this"
+    f.arrayBuffer().then(MENU.shaFromBuffer)
   }
   shaFromURL(u) { //URL or string
-     fetch(u).then(r => q = r)
-    return "implement this"
+     fetch(u).then(r => r.arrayBuffer()).then(MENU.shaFromBuffer)
   }
   shaFromString(txt) {
     if (txt.startsWith('https://')) {
