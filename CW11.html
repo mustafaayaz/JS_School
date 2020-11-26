@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Asynchronous Programming </title>
+
+  <style> /* CSS comment */
+    body { max-width: 440px; }
+    #url { width: 190px; }
+    span, #url { color: blue; }
+  </style>
+</head>
+
+<body>   <!-- HTML comment: Modify all items marked xxx -->
+
+<h2 id=title title="Modify xxx"></h2>
+
+<p title="Battery level">
+  Battery level: <span id=level>??</span>
+</p>
+<p id='isCharging'>
+    isCharging ?
+</p>
+<p id="online">
+is online?
+</p>
+<h4 id=key>KEY: </h4>
+
+
+
+<hr />
+<b>Sample code</b>
+<pre id=sample>This text is not shown. Why?</pre>
+
+<hr />
+
+<script>
+"use strict";
+// JavaScript comment
+
+
+
+
+ let second = document.getElementById("#secSec")
+let a = window.onload = function () {
+      function updateBatteryStatus(battery) {
+        document.querySelector('#isCharging').textContent = battery.charging ? 'charging' : 'discharging';
+      }
+      navigator.getBattery().then(function(battery) {
+        updateBatteryStatus(battery);
+
+        battery.onchargingchange = function () {
+          updateBatteryStatus(battery);
+        };
+
+        battery.onlevelchange = function () {
+          updateBatteryStatus(battery);
+          if(battery.charging)
+            document.querySelector('stateBaterry').textContent = "Charging time: " + (battery.chargingTime / 60);
+          else
+            document.querySelector('stateBaterry').textContent = "Discharging time: " + (battery.dischargingTime / 60);
+        };
+      });
+    };
+
+setInterval(function () {
+  let online = document.getElementById('online')
+  online.innerHTML = navigator.onLine ? 'online' : 'offline';  
+}, 500);
+
+let keyDOWN = window.addEventListener("keydown", function (e) {
+  document.getElementById("key").innerHTML = "KEYDOWN: " + e.key;
+})
+
+let keyUP = window.addEventListener("keyup", function (e) {
+  document.getElementById("key").innerHTML = "KEYUP: " + e.key;
+})
+ 
+function init() {
+   
+    navigator.getBattery().then(b => 
+      level.innerText = 100*b.level+'%'
+    )
+}
+    title.innerText = document.title;
+    sample.innerText = init+'\n'+a+'\n'+setInterval+'\n'+ keyDOWN + '\n' + keyDOWN;
+    init();
+</script>
+
+</body>
+</html>
