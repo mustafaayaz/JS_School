@@ -1,0 +1,26 @@
+{
+    "name": "Mustafa Ayaz",
+    "description": "Advanced Programming Classwork",
+    "short_name": "JS_School",
+    "start_url": "/JS_School/index.html",
+    "display": "standalone",
+    "background_color": "white",
+    "theme_color": "#457cdb",
+    "icons": [
+        {
+            "src": "img_JS",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "img_JS",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "img_JS",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
