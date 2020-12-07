@@ -1,5 +1,5 @@
 const CACHE ='JS_Class'
-const FILES = ['/JS/CW1/CW1.png', '/JS/cmToInch.html', '/JS/mustafa_ayaz_corr.html',
+const FILES = ['/JS','/JS/CW1/CW1.png', '/JS/cmToInch.html', '/JS/mustafa_ayaz_corr.html',
  '/JS/ClassWork4.html', '/JS/FtoC&reverse.html','/JS/CW6','/JS/Database/CW7.html','/JS/CW8/CW8.html',
  '/JS/CW9_CountingJS.html', '/JS/CW10.html','/JS/CW11','/JS/CW12.html','/JS/PoissonTable.html','/JS/HW2/HW2-StudentDatabase.html'
 ]
