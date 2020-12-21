@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="application-name" content="Quiz" />
+<meta name="viewport" content="width=device-width">
+</head>	
+<style>	
+body{
+	background:lightblue;
+}
+div#test{
+	height: 620px;
+	width: 400px;
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translateX(-50%) translateY(-50%);
+	background: wheat;
+	border: 2px solid black;
+}
+.title{
+	padding: 30px 0 5px 10px;
+	text-align: center;
+	font-size: 36px;
+	color: red;
+}
+
+.start{
+
+	font-size: 20px;
+	font-weight: bold;
+	color: #000000;
+	width: 350px;
+	display: inline-block;
+	padding: 15px 0 0px 10px;
+	vertical-align: middle;
+	margin: 5px 0 10px 25px;
+	border-radius: 20px;
+}
+
+.next-btn{
+	border: none;
+	background: black;
+	color: white;
+	width: 100px;
+	height: 35px;
+	border-radius: 15px;
+	cursor: pointer;
+	float: right;
+	margin: 10px 18px 5px 10px;
+}
+
+
+
+
+</style>
+
+<script>
+"use strict";
+var currentQuestion, chA, chB, chC, chD, trueAnswer;
+var questions = [];
+const url = "https://mustafaayaz.github.io/JS_School/sorular.txt";
+function readData(){
+    fetch(url)
+        .then(txt=>txt.text())
+        .then(txt =>{
+    let a = txt.split("\n");
+	for(let i=0;i<a.length-1;i++){
+    	let b = a[i].split("\t"); // tablara göre böler.
+    	currentQuestion = b[0], chA = b[1], chB = b[2], chC=b[3], chD=b[4], trueAnswer=b[5];
+    	questions.push([currentQuestion, chA, chB, chC, chD, trueAnswer]);
+	}
+	startPage();
+});
+}
+
+
+function startPage(){//başlangıç sayfası
+let test = document.getElementById("test");
+	     test.innerHTML ="<div class='title'>"+"QUIZ"+"</div><br><br>";
+		 test.innerHTML +="<div class='start'><u1><li>Her doğru soru +10 puan </li><br></div>"
+		 test.innerHTML +="<div class='start'><li>Her yanlış soru -5 puan </li><br></div>"
+		 test.innerHTML +="<div class='start'><li>Bakalım kaç puan toplayacaksın? </li></ul><br></div>"
+		 test.innerHTML += "<button id='nextButton' class='next-btn' onclick='' >Başla</button>";
+}
+
+
+
+readData();
+</script>
+
+<body>
+	<div id="test"></div>
+</body>
+</html>
