@@ -112,6 +112,10 @@ div#test{
 	color: #000000;
 	border-radius: 20px;
 }
+input.choices {
+  pointer-events:none;
+  opacity:0.5;
+}
 </style>
 
 <script>
@@ -180,10 +184,10 @@ function sorular(){	// soru ekrani
 	test.innerHTML +="<div id='quizContainer' class='container'>"
 	test.innerHTML +="<div class='title2'>"+"Quiz"+"</div>"
 	test.innerHTML += "<div id='question' class='question'>"+ (whichQ + 1) +") " + question +"</div>"
-	test.innerHTML += "<label id='A' class='option' ><input type='radio' name='choices' onchange='cevapKontrol()' value='A'/> " + A + "</label><br>"
-	test.innerHTML += "<label id='B' class='option' ><input type='radio' name='choices' onchange='cevapKontrol()' value='B'/> " + B + "</label><br>"
-	test.innerHTML += "<label id='C' class='option' ><input type='radio' name='choices' onchange='cevapKontrol()' value='C'/> " + C + "</label><br>"
-	test.innerHTML += "<label id='D' class='option' ><input type='radio' name='choices' onchange='cevapKontrol()' value='D'/> " + D + "</label><br>"
+	test.innerHTML += "<label id='A' class='option' ><input type='radio' name='choices' id='opt1' onchange='cevapKontrol()' value='A'/> " + A + "</label><br>"
+	test.innerHTML += "<label id='B' class='option' ><input type='radio' name='choices' id='opt2' onchange='cevapKontrol()' value='B'/> " + B + "</label><br>"
+	test.innerHTML += "<label id='C' class='option' ><input type='radio' name='choices' id='opt3' onchange='cevapKontrol()' value='C'/> " + C + "</label><br>"
+	test.innerHTML += "<label id='D' class='option' ><input type='radio' name='choices' id='opt4' onchange='cevapKontrol()' value='D'/> " + D + "</label><br>"
 	test.innerHTML += "<button id='nextButton' class='next-btn' onclick='checkAnswer()'>Ileri</button></div>"
 }
 function checkAnswer(){
@@ -216,19 +220,24 @@ function cevapKontrol(){
 		if(choice.includes(questions[r][5]))
 			temp=choice
 	}
-	if( attempts != 1){
-		for(var i=0; i<choices.length; i++){
-			choice = choices[i].value
-			if(choices[i].checked){
-				if(choice.includes(questions[r][5])){
-				document.getElementById(choice).style.background='#00fa00'	// yesil
-				attempts = 1
+
+	for(var i=0; i<choices.length; i++){
+		choice = choices[i].value
+		if(choices[i].checked){
+			if(choice.includes(questions[r][5])){
+				document.getElementById(choice).style.background='#00fa00'  // yesil
+				document.getElementById("opt1").disabled = true
+				document.getElementById("opt2").disabled = true
+				document.getElementById("opt3").disabled = true
+				document.getElementById("opt4").disabled = true
 				}
-				else if (!choice.includes(questions[r][5])){
+			else if (!choice.includes(questions[r][5])){
 				document.getElementById(choice).style.background='#fa0000'	// kirmizi
 				document.getElementById(temp).style.background='#00fa00' // yesil
-				attempts  = 1
-				}
+				document.getElementById("opt1").disabled = true
+				document.getElementById("opt2").disabled = true
+				document.getElementById("opt3").disabled = true
+				document.getElementById("opt4").disabled = true
 			}
 		}
 	}
@@ -243,13 +252,13 @@ function soruSor(){   // sonuc
 	    if(score<=25){
 			test.innerHTML += "<div class='cr'><h2>"+"Kendini geliştirmen lazım"+"</h2></div>"
 		}
-		if(score < 50 && score > 25){
+		else if(score < 50 && score > 25){
 			test.innerHTML += "<div class='cr'><h2>"+"Daha iyisini yapabilirsin"+"</h2></div>"
 		}
-		if(score >= 50 && score < 75){
+		else if(score >= 50 && score < 75){
 			test.innerHTML += "<div class='cr'><h2>"+"İyi olmaya çok yakınsın"+"</h2></div>"
 		}
-		if(score >= 75){
+		else{
 			test.innerHTML += "<div class='cr'><h2>"+"Çok iyisin!"+"</h2></div>"
 		}
 		whichQ = 0
