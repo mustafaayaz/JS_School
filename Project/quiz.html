@@ -226,12 +226,19 @@ function cevapKontrol(){
 		if(choices[i].checked){
 			if(choice.includes(questions[r][5])){
 				document.getElementById(choice).style.background='#00fa00'  // yesil
-				document.getElementsByClassName("option").disabled = true
+				document.getElementById("opt1").disabled = true
+				document.getElementById("opt2").disabled = true
+				document.getElementById("opt3").disabled = true
+				document.getElementById("opt4").disabled = true
+
 				}
 			else if (!choice.includes(questions[r][5])){
 				document.getElementById(choice).style.background='#fa0000'	// kirmizi
 				document.getElementById(temp).style.background='#00fa00' // yesil
-				document.getElementsByClassName("option").disabled = true
+				document.getElementById("opt1").disabled = true
+				document.getElementById("opt2").disabled = true
+				document.getElementById("opt3").disabled = true
+				document.getElementById("opt4").disabled = true
 			}
 		}
 	}
