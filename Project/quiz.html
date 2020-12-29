@@ -10,7 +10,7 @@ body{
 	background:lightblue;
 }
 div#test{
-	height: 620px;
+	height: 580px;
 	width: 400px;
 	position: absolute;
 	top:50%;
@@ -111,10 +111,19 @@ div#test{
 	margin: 10px 0 10px 30px;
 	color: #000000;
 	border-radius: 20px;
-}
+}	
 input.choices {
   pointer-events:none;
   opacity:0.5;
+}
+#isim {
+	float:right;
+	bottom: 0px;
+	position: fixed;
+	margin-left: 270px;
+	font-weight: bold;
+	width: 110px;
+	margin-bottom: 10px;
 }
 </style>
 
@@ -134,12 +143,6 @@ function readData(){
     	let b = a[i].split("\t") // tablara göre soruları böler
     	question = b[0], A = b[1], B = b[2], C=b[3], D=b[4], trueAnswer=b[5]
 		questions.push([question, A, B, C, D, trueAnswer])
-		console.log(b[0])
-		console.log(b[1])
-		console.log(b[2])
-		console.log(b[3])
-		console.log(b[4])
-		console.log(b[5])
 	}
 	startPage()
 })
@@ -158,17 +161,23 @@ function random() {	// soru sayısına kadar random sayı üretir, dinamik degil
 }
 
 function startPage(){	// başlangıç sayfası
-test = document.getElementById("test")
-array=[]
-test.innerHTML ="<div class='title'>"+"QUIZ"+"</div><br><br>"
-		 test.innerHTML +="<div class='start'><u1><li>Her doğru soru +10 puan </li><br></div>"
-		 test.innerHTML +="<div class='start'><li>Her yanlış soru -5 puan </li><br></div>"
-		 test.innerHTML +="<div class='start'><li>Bakalım kaç puan toplayacaksın? </li></ul><br></div>"
-		 test.innerHTML += "<button id='nextButton' class='next-btn' onclick='soruSor()' >Basla</button>"
+		test = document.getElementById("test")
+		array=[]
+		test.innerHTML ="<div class='title'>"+"QUIZ"+"</div><br><br>"
+		test.innerHTML +="<div class='start'><li>Toplamda 10 soru sorulacak</li></ul><br></div>"
+		test.innerHTML +="<div class='start'><u1><li>Her doğru soru +10 puan </li><br></div>"
+		test.innerHTML +="<div class='start'><li>Her yanlış soru -5 puan </li><br></div>"
+		test.innerHTML +="<div class='start'><li>Bakalım kaç puan toplayacaksın? </li></ul><br></div>"
+		test.innerHTML += "<button id='nextButton' class='next-btn' onclick='soruSor()' >Basla</button>"
+		test.innerHTML +="<div id='isim' >© Mustafa Ayaz </div>"
+
 }
 
 function sorular(){	// soru ekrani
 	r=random();
+	let temp 
+	temp = whichQ
+	// console.log("temp = " + temp)
 	test.innerHTML = "<div class='indicator'>Soru " +(whichQ+1)+" / "+questions.length+"</div>"
 	test.innerHTML += "<div class='score'> Skor =  " + score +"</div>"
 	question = questions[r][0]  //random seçilen soru ve cevapları
@@ -176,20 +185,28 @@ function sorular(){	// soru ekrani
 	B = questions[r][2]
 	C = questions[r][3]
 	D = questions[r][4]
-	console.log("----")
-	console.log(A)
-	console.log(B)
-	console.log(C)
-	console.log(D)
 	test.innerHTML +="<div id='quizContainer' class='container'>"
 	test.innerHTML +="<div class='title2'>"+"Quiz"+"</div>"
 	test.innerHTML += "<div id='question' class='question'>"+ (whichQ + 1) +") " + question +"</div>"
-	test.innerHTML += "<label id='A' class='option' ><input type='radio' name='choices' id='opt1' onchange='cevapKontrol()' value='A'/> " + A + "</label><br>"
-	test.innerHTML += "<label id='B' class='option' ><input type='radio' name='choices' id='opt2' onchange='cevapKontrol()' value='B'/> " + B + "</label><br>"
-	test.innerHTML += "<label id='C' class='option' ><input type='radio' name='choices' id='opt3' onchange='cevapKontrol()' value='C'/> " + C + "</label><br>"
-	test.innerHTML += "<label id='D' class='option' ><input type='radio' name='choices' id='opt4' onchange='cevapKontrol()' value='D'/> " + D + "</label><br>"
-	test.innerHTML += "<button id='nextButton' class='next-btn' onclick='checkAnswer()'>Ileri</button></div>"
-	setTimeout(function() { checkAnswer() }, 10 * 1000)
+	test.innerHTML += "<label id='A' class='option' ><input type='radio' name='choices' id='opt1' onchange='kirmiziYesil()' value='A'/> " + A + "</label><br>"
+	test.innerHTML += "<label id='B' class='option' ><input type='radio' name='choices' id='opt2' onchange='kirmiziYesil()' value='B'/> " + B + "</label><br>"
+	test.innerHTML += "<label id='C' class='option' ><input type='radio' name='choices' id='opt3' onchange='kirmiziYesil()' value='C'/> " + C + "</label><br>"
+	test.innerHTML += "<label id='D' class='option' ><input type='radio' name='choices' id='opt4' onchange='kirmiziYesil()' value='D'/> " + D + "</label><br>"
+
+	if(whichQ == 9) {
+		test.innerHTML += "<button id='nextButton' class='next-btn' onclick='checkAnswer()'>Bitti</button></div>"
+	}else{
+		test.innerHTML += "<button id='nextButton' class='next-btn' onclick='checkAnswer()'>Ileri</button></div>"
+	}
+	 // console.log(whichQ)
+	setTimeout(function() {
+		if(whichQ !=0 && whichQ < 10 && temp == whichQ && !opt1.checked && !opt2.checked && !opt3.checked && !opt4.checked){
+			checkAnswer()
+			// console.log(whichQ + ". soruyu zamaninda yanitlayamadin")
+		}
+	 }, 10000)
+
+	 
 
 }
 function checkAnswer(){
@@ -214,19 +231,17 @@ function checkAnswer(){
     soruSor()
 }
 
-function cevapKontrol(){ 
+function kirmiziYesil(){ 
 	let attempts, temp, choice
 	choices = document.getElementsByName("choices")
-	for(var i = 0; i < choices.length; i++){
-		choice = choices[i].value
-		if(choice.includes(questions[r][5]))
-			temp=choice
-	}
 
 	for(var i=0; i<choices.length; i++){
-		choice = choices[i].value
 		if(choices[i].checked){
+			console.log(choices[i].value + " şıkkını seçtin")
+			choice = choices[i].value
 			if(choice.includes(questions[r][5])){
+				console.log("dogru")
+				console.log("---")
 				document.getElementById(choice).style.background='#00fa00'  // yesil
 				document.getElementById("opt1").disabled = true
 				document.getElementById("opt2").disabled = true
@@ -235,8 +250,11 @@ function cevapKontrol(){
 
 				}
 			else if (!choice.includes(questions[r][5])){
+				console.log("yanlis")
+				console.log("dogru cevap " + questions[r][5])
+				console.log("---")
 				document.getElementById(choice).style.background='#fa0000'	// kirmizi
-				document.getElementById(temp).style.background='#00fa00' // yesil
+				document.getElementById(questions[r][5]).style.background='#00fa00' // yesil
 				document.getElementById("opt1").disabled = true
 				document.getElementById("opt2").disabled = true
 				document.getElementById("opt3").disabled = true
@@ -280,3 +298,4 @@ readData()
 	<div id="test"></div>
 </body>
 </html>
+
