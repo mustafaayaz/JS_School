@@ -189,6 +189,8 @@ function sorular(){	// soru ekrani
 	test.innerHTML += "<label id='C' class='option' ><input type='radio' name='choices' id='opt3' onchange='cevapKontrol()' value='C'/> " + C + "</label><br>"
 	test.innerHTML += "<label id='D' class='option' ><input type='radio' name='choices' id='opt4' onchange='cevapKontrol()' value='D'/> " + D + "</label><br>"
 	test.innerHTML += "<button id='nextButton' class='next-btn' onclick='checkAnswer()'>Ileri</button></div>"
+	setTimeout(function() { checkAnswer() }, 10 * 1000)
+
 }
 function checkAnswer(){
 	let choice
